@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { dbService } from "fbase";
+import { storageService } from "fbase";
 
 const Nweet = ({ nweetObj, isOwner }) => {
     const [editing, setEditing] = useState(false); //edit모드인지 아닌지 알려주는 부분
@@ -9,6 +10,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
         console.log(ok)
         if (ok) {
             await dbService.doc(`nweets/${nweetObj.id}`).delete();
+            await storageService.refFromURL(nweetObj.attachmentUrl).delete();
         }
     };
     const toggleEditing = () => setEditing((prev) => !prev);
@@ -44,6 +46,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
                         <button onClick={toggleEditing}>Cancel</button>
                     </>
                 ) : (<><h4>{nweetObj.text}</h4>
+                    {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} width="50px" height="50px" />}
                     {isOwner && (
                         <>
                             <button onClick={onDeleteClick}>Delete Nweet</button>
