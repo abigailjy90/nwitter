@@ -17,7 +17,7 @@ function App() {
         });
       } else {
         setIsLoggedIn(false);
-      }
+      };
       setInit(true);
     });
   }, []);
